@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="elastictest.dao.MySqlMapper">
+
+    <resultMap id="byKcResult" type="elastictest.dto.StdntDto">
+        <result property="std_crs_no" column="STD_CHPT_NO" />
+        <result property="std_chpt_no" column="STD_CRS_NO" />
+        <result property="std_achv_cd" column="STD_ACHV_CD" />
+        <result property="achv_stdr_cn" column="ACHV_STDR_CN" />
+    </resultMap>
+
+    <insert id="insertAll" parameterType="list">
+        insert into tb_lms_stdnt_cpblt_idct_stdnt (
+             STDNT_ID, LCTR_CD, STD_CRS_NO, STD_CHPT_NO, STD_ACHV_CD, ACHV_STDR_CN,
+             KC_CD, KC_AVG, YMD, REG_DT
+        ) values
+        <foreach collection="list" item="stdntDtos" separator=",">
+            (#{stdntDtos.stdnt_id}, #{stdntDtos.lctr_cd}, #{stdntDtos.std_crs_no},
+             #{stdntDtos.std_chpt_no}, #{stdntDtos.std_achv_cd}, #{stdntDtos.achv_stdr_cn},
+             #{stdntDtos.kc_cd}, #{stdntDtos.kc_avg}, #{stdntDtos.ymd}, NOW() )
+        </foreach>
+    </insert>
+
+    <select id="findByKcCode" parameterType="String" resultMap="byKcResult">
+        select STD_CHPT_NO, STD_CRS_NO, STD_ACHV_CD, ACHV_STDR_CN FROM tb_lms_achv WHERE KNLDG_MAP_ID = #{kcCode}
+    </select>
+
+<!--&lt;!&ndash;  STD_CHPT_NO로 chpt_id, crs_id 찾기  &ndash;&gt;-->
+<!--    <select id="findIds" parameterType="Integer" resultType="Integer">-->
+<!--        select CHPT_ID FROM tb_lms_chpt WHERE STD_CHPT_NO = #{chptNo}-->
+<!--    </select>-->
+
+    <select id="findLectureCode" parameterType="map" resultType="String">
+        SELECT DISTINCT LCTR_CD
+        FROM tb_lms_mdul
+        WHERE LCTR_CD IN (
+            SELECT LCTR_CD
+            FROM tb_lms_stdnt
+            WHERE STDNT_ID = #{accountName}
+        )
+          AND CHPT_ID IN (
+            SELECT CHPT_ID
+            FROM tb_lms_chpt
+            WHERE STD_CHPT_NO = #{chptNo}
+        )
+    </select>
+</mapper>

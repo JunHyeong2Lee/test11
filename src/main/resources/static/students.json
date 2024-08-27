@@ -1,0 +1,83 @@
+{
+    "properties": {
+      "_class": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "account_name": {
+        "type": "keyword"
+      },
+      "creationDate": {
+        "type": "date"
+      },
+      "id": {
+        "type": "keyword"
+      },
+      "metrics": {
+        "type": "object",
+        "properties": {
+          "child": {
+            "type": "nested",
+            "properties": {
+              "child": {
+                "type": "nested",
+                "properties": {
+                  "code": {
+                    "type": "keyword",
+                    "fields": {
+                      "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                      }
+                    }
+                  },
+                  "name": {
+                    "type": "text",
+                    "fields": {
+                      "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "double"
+                  }
+                }
+              },
+              "code": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "text",
+                "fields": {
+                  "keyword": {
+                    "type": "keyword"
+                  }
+                }
+              }
+            }
+          },
+          "code": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          },
+          "value": {
+            "type": "double"
+          }
+        }
+      }
+    }
+  }
